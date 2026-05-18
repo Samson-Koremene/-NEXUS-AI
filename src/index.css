@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply antialiased font-sans bg-[#070809] text-zinc-300;
+  }
+  ::selection {
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  /* Prevent iOS rubber-band scroll on fixed elements */
+  #root {
+    height: 100dvh;
+    overflow: hidden;
+  }
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.2); }
+
+/* ── Typing indicator ── */
+@keyframes typing {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50%       { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot { animation: typing 1.4s infinite ease-in-out; }
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Slide-up entry ── */
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-in-up {
+  animation: slide-in-up 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+/* ── Slide-in from right (mobile drawer) ── */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+/* ── Fade-in ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in { animation: fade-in 0.2s ease forwards; }
+
+/* ── AI vortex logo ── */
+@keyframes rotate-vortex {
+  0%   { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 15px rgba(16,185,129,0.25)); }
+  50%  { transform: rotate(180deg) scale(1.03); filter: drop-shadow(0 0 25px rgba(16,185,129,0.45)); }
+  100% { transform: rotate(360deg) scale(1);    filter: drop-shadow(0 0 15px rgba(16,185,129,0.25)); }
+}
+.animate-vortex { animation: rotate-vortex 10s infinite linear; }
+
+/* ── Safe-area bottom padding for iPhone notch ── */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.mb-safe  { margin-bottom:  env(safe-area-inset-bottom, 0px); }
+
+/* ── Focus ring reset for custom buttons ── */
+button:focus-visible { @apply outline-none ring-2 ring-emerald-500/40 ring-offset-1 ring-offset-[#070809]; }
+
+/* ── Floating Background Nebula Orbs ── */
+@keyframes float-nebula-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%      { transform: translate(80px, -100px) scale(1.2); }
+  66%      { transform: translate(-50px, 50px) scale(0.85); }
+}
+@keyframes float-nebula-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%      { transform: translate(-100px, 100px) scale(1.15); }
+}
+.animate-nebula-1 {
+  animation: float-nebula-1 14s infinite ease-in-out;
+}
+.animate-nebula-2 {
+  animation: float-nebula-2 18s infinite ease-in-out;
+}
+
+/* ── Cyber scanning grid line wave ── */
+@keyframes scan-grid {
+  0%   { background-position: 0 0; }
+  100% { background-position: 4.5rem 9rem; }
+}
+.animate-grid-scan {
+  animation: scan-grid 22s linear infinite;
+}
+
+/* ── Sci-Fi Core Wave & Particle Release Patterns ── */
+
+/* 1. Concentric shockwave expanders */
+@keyframes release-wave {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+.animate-release-wave-1 {
+  animation: release-wave 4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+.animate-release-wave-2 {
+  animation: release-wave 4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+  animation-delay: 2s;
+}
+
+/* 2. Concentric Tech Ring wave (dashed / double) */
+@keyframes release-tech-ring {
+  0% {
+    transform: scale(0.9) rotate(0deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.6) rotate(180deg);
+    opacity: 0;
+  }
+}
+.animate-release-tech-1 {
+  animation: release-tech-ring 5s cubic-bezier(0.2, 0.6, 0.2, 1) infinite;
+}
+.animate-release-tech-2 {
+  animation: release-tech-ring 5s cubic-bezier(0.2, 0.6, 0.2, 1) infinite;
+  animation-delay: 2.5s;
+}
+
+/* 3. Particle Starburst release */
+@keyframes release-particle {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--p-x), var(--p-y)) scale(1.3);
+    opacity: 0;
+  }
+}
+.animate-release-particle {
+  animation: release-particle 3.5s cubic-bezier(0.1, 0.8, 0.25, 1) infinite;
+}

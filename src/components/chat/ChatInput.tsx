@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { ArrowUp, Paperclip, X, Mic, RefreshCw, Lightbulb, Monitor, Plus, ChevronRight, FileText, Image, Globe, Folder, Compass, MoreHorizontal } from 'lucide-react';
+import { useChatStore } from '../../store/chatStore';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -10,9 +11,9 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   const [text, setText]                   = React.useState('');
   const [file, setFile]                   = React.useState<File | null>(null);
   const [listening, setListening]         = React.useState(false);
-  const [reasoning, setReasoning]         = React.useState(false);
-  const [deepResearch, setDeepResearch]   = React.useState(false);
   const [menuOpen, setMenuOpen]           = React.useState(false);
+
+  const { chatMode, setChatMode } = useChatStore();
 
   const textareaRef  = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,8 +62,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   const reset = () => {
     setText('');
     setFile(null);
-    setReasoning(false);
-    setDeepResearch(false);
+    setChatMode('normal');
   };
 
   const canSend = !disabled && (text.trim().length > 0 || !!file);
@@ -72,17 +72,13 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     if (!canSend) return;
 
     let payload = text.trim();
-    const prefixes: string[] = [];
-    if (reasoning)    prefixes.push('[Mode: Reasoning]');
-    if (deepResearch) prefixes.push('[Mode: Deep Research]');
-    if (prefixes.length) payload = `${prefixes.join(' ')} ${payload}`;
     if (file) payload = `${payload}\n\n[Attached: ${file.name}]`.trim();
 
     onSend(payload);
     setText('');
     setFile(null);
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
-  }, [canSend, text, reasoning, deepResearch, file, onSend]);
+  }, [canSend, text, file, onSend]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); }
@@ -208,36 +204,36 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
                   <button
                     type="button"
                     onClick={() => {
-                      setReasoning(r => !r);
+                      setChatMode(chatMode === 'reasoning' ? 'normal' : 'reasoning');
                       setMenuOpen(false);
                     }}
                     className={`flex items-center justify-between w-full px-3 py-2 rounded-xl transition-all text-xs font-semibold ${
-                      reasoning ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                      chatMode === 'reasoning' ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-300 hover:text-white hover:bg-white/[0.04]'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Lightbulb size={14} className={reasoning ? 'text-emerald-400' : 'text-zinc-400'} />
-                      <span>Thinking</span>
+                      <Lightbulb size={14} className={chatMode === 'reasoning' ? 'text-emerald-400' : 'text-zinc-400'} />
+                      <span>Reasoning Mode</span>
                     </div>
-                    {reasoning && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
+                    {chatMode === 'reasoning' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
                   </button>
 
                   {/* Deep research */}
                   <button
                     type="button"
                     onClick={() => {
-                      setDeepResearch(d => !d);
+                      setChatMode(chatMode === 'deep-research' ? 'normal' : 'deep-research');
                       setMenuOpen(false);
                     }}
                     className={`flex items-center justify-between w-full px-3 py-2 rounded-xl transition-all text-xs font-semibold ${
-                      deepResearch ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                      chatMode === 'deep-research' ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-300 hover:text-white hover:bg-white/[0.04]'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Compass size={14} className={deepResearch ? 'text-emerald-400' : 'text-zinc-400'} />
-                      <span>Deep research</span>
+                      <Compass size={14} className={chatMode === 'deep-research' ? 'text-emerald-400' : 'text-zinc-400'} />
+                      <span>Deep Research Mode</span>
                     </div>
-                    {deepResearch && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
+                    {chatMode === 'deep-research' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
                   </button>
 
                   {/* Web search */}
@@ -294,8 +290,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
 
           <div className="w-px h-3.5 bg-white/5 mx-0.5" />
 
-          <Pill active={reasoning}    onClick={() => setReasoning(r => !r)}         icon={Lightbulb} label="Reasoning"     />
-          <Pill active={deepResearch} onClick={() => setDeepResearch(d => !d)}      icon={Monitor}   label="Deep Research" />
+          <Pill active={chatMode === 'reasoning'}    onClick={() => setChatMode(chatMode === 'reasoning' ? 'normal' : 'reasoning')}         icon={Lightbulb} label="Reasoning"     />
+          <Pill active={chatMode === 'deep-research'} onClick={() => setChatMode(chatMode === 'deep-research' ? 'normal' : 'deep-research')}      icon={Monitor}   label="Deep Research" />
         </div>
 
         {/* Right: mic + send */}

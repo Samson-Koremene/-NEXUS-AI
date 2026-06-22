@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Message, Session } from '../types/chat';
+import type { ChatMode } from '../types/modes';
 import { storage } from '../lib/storage';
 
 interface ChatState {
@@ -7,11 +8,13 @@ interface ChatState {
   messages: Message[];
   isLoading: boolean;
   activeModel: string;
+  chatMode: ChatMode;
   setSession: (session: Session | null) => void;
   addMessage: (message: Message) => void;
   updateMessage: (id: string, updates: Partial<Message>) => void;
   setLoading: (loading: boolean) => void;
   setModel: (modelId: string) => void;
+  setChatMode: (mode: ChatMode) => void;
   clearSession: () => void;
 }
 
@@ -20,6 +23,7 @@ export const useChatStore = create<ChatState>((set) => ({
   messages: [],
   isLoading: false,
   activeModel: storage.getModel(),
+  chatMode: 'normal',
 
   setSession: (session) => {
     if (session) {
@@ -48,5 +52,7 @@ export const useChatStore = create<ChatState>((set) => ({
     set({ activeModel: modelId });
   },
 
-  clearSession: () => set({ currentSessionId: null, messages: [] }),
+  setChatMode: (chatMode) => set({ chatMode }),
+
+  clearSession: () => set({ currentSessionId: null, messages: [], chatMode: 'normal' }),
 }));

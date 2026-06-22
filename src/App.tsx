@@ -1,12 +1,13 @@
 import { Suspense, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { Sidebar } from './components/layout/Sidebar';
 import { TopBar } from './components/layout/TopBar';
 import { HistorySidebar } from './components/layout/HistorySidebar';
 import ChatPage from './pages/ChatPage';
-import SettingsPage from './pages/SettingsPage';
-import DashboardPage from './pages/DashboardPage';
-import DocsPage from './pages/DocsPage';
+import LoginPage from './pages/LoginPage';
+import AuthCallback from './pages/AuthCallback';
 
 export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -20,9 +21,10 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      {/* Full-height container that never overflows */}
-      <div 
+    <ErrorBoundary>
+      <Router>
+        {/* Full-height container that never overflows */}
+        <div 
         onMouseMove={handleMouseMove}
         className="flex h-[100dvh] w-full bg-[#070809] text-zinc-300 overflow-hidden font-sans relative"
       >
@@ -71,11 +73,10 @@ export default function App() {
                 </div>
               }>
                 <Routes>
-                  <Route path="/"         element={<ChatPage />} />
-                  <Route path="/stats"    element={<DashboardPage />} />
-                  <Route path="/docs"     element={<DocsPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="*"         element={<Navigate to="/" replace />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  <Route path="/" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Suspense>
             </main>
@@ -101,7 +102,8 @@ export default function App() {
             </div>
           </>
         )}
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }

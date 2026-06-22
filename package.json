@@ -1,15 +1,21 @@
 {
   "name": "nexus-ai",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Multi-model AI chat interface with intelligent intent routing",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "supabase:deploy": "supabase functions deploy"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.7",
     "@tanstack/react-query": "^5.0.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.300.0",

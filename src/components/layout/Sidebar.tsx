@@ -1,12 +1,9 @@
-
 import { NavLink } from 'react-router-dom';
-import { MessageSquare, Cpu, LogOut, BarChart3, BookOpen, Globe } from 'lucide-react';
+import { MessageSquare, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const NAV = [
-  { to: '/',         icon: MessageSquare, label: 'Chat' },
-  { to: '/stats',    icon: BarChart3,     label: 'Stats' },
-  { to: '/docs',     icon: BookOpen,      label: 'Docs' },
-  { to: '/settings', icon: Globe,         label: 'Web Keys' },
+  { to: '/', icon: MessageSquare, label: 'Chat' },
 ];
 
 function NavIcon({
@@ -16,9 +13,8 @@ function NavIcon({
     <NavLink
       to={to}
       title={label}
-      onClick={(e) => to === '#' && e.preventDefault()}
       className={({ isActive }) => {
-        const active = isActive && to !== '#';
+        const active = isActive;
         if (side === 'desktop') {
           return `w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-150 ${
             active
@@ -38,8 +34,12 @@ function NavIcon({
 }
 
 export function Sidebar() {
-  const handleSignOut = () => {
-    if (confirm('Sign out of NEXUS AI?')) alert('Signed out.');
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    if (confirm('Sign out of NEXUS AI?')) {
+      await signOut();
+    }
   };
 
   return (
@@ -47,8 +47,8 @@ export function Sidebar() {
       {/* ── Desktop: left icon rail ── */}
       <div className="hidden md:flex w-16 bg-[#0d0e10]/80 backdrop-blur-xl border-r border-white/5 flex-col items-center justify-between py-5 h-full z-20 select-none flex-shrink-0">
         {/* Logo */}
-        <div className="w-9 h-9 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/5 animate-pulse">
-          <Cpu size={18} />
+        <div className="w-9 h-9 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/5">
+          <MessageSquare size={18} />
         </div>
 
         {/* Nav */}

@@ -1,3 +1,6 @@
+import { isSupabaseConfigured } from './supabase'
+import { callEdgeFunction } from './edgeFunctions'
+
 const LANGUAGE_IDS: Record<string, number> = {
   python: 71,
   javascript: 63,
@@ -6,6 +9,16 @@ const LANGUAGE_IDS: Record<string, number> = {
 };
 
 export async function executeCode(code: string, language: string, apiKey: string): Promise<string> {
+  // Use Supabase Edge Function if configured
+  if (isSupabaseConfigured()) {
+    const data = await callEdgeFunction('code-exec', { code, language })
+
+    if (data?.error) throw new Error(data.error)
+
+    return data.output
+  }
+
+  // Fallback to direct API call
   const language_id = LANGUAGE_IDS[language.toLowerCase()] || 63; // Default to JS if unknown
 
   const submitRes = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&fields=*', {

@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import { useChatStore } from '../store/chatStore';
-import { useSettings } from './useSettings';
 import { classifyIntent } from '../lib/intentClassifier';
 import { generateImage } from '../lib/imageService';
 import { executeCode } from '../lib/codeService';
@@ -10,14 +9,27 @@ import { callLLM } from '../lib/modelRouter';
 import { storage } from '../lib/storage';
 import { Message, Session } from '../types/chat';
 import { ModelId } from '../types/models';
+import { CHAT_MODES } from '../types/modes';
 
 function generateId() {
   return crypto.randomUUID();
 }
 
+// Get API keys from environment variables
+function getApiKeysForRouting() {
+  return {
+    openai: import.meta.env.VITE_OPENAI_API_KEY || '',
+    anthropic: import.meta.env.VITE_ANTHROPIC_API_KEY || '',
+    google: import.meta.env.VITE_GOOGLE_AI_API_KEY || '',
+    groq: import.meta.env.VITE_GROQ_API_KEY || '',
+    serper: import.meta.env.VITE_SERPER_API_KEY || '',
+    judge0: import.meta.env.VITE_JUDGE0_API_KEY || '',
+  };
+}
+
 export function useChat() {
-  const { currentSessionId, messages, activeModel, isLoading, addMessage, updateMessage, setLoading, setSession } = useChatStore();
-  const { getApiKeysForRouting, keys } = useSettings();
+  const { currentSessionId, messages, activeModel, isLoading, chatMode, addMessage, updateMessage, setLoading, setSession } = useChatStore();
+  const keys = getApiKeysForRouting();
 
   const saveCurrentSession = (updatedMessages: Message[]) => {
     const sessionId = currentSessionId || generateId();
@@ -52,6 +64,9 @@ export function useChat() {
       saveCurrentSession(currentHistory);
 
       const apiKeys = getApiKeysForRouting();
+      
+      // Get mode-specific system prompt
+      const modeSystemPrompt = CHAT_MODES[chatMode].systemPrompt;
       
       // Step 1: Classify Intent
       const classification = await classifyIntent(userText, messages, activeModel as ModelId, apiKeys);
@@ -125,7 +140,12 @@ export function useChat() {
 
           case 'conversation':
           default:
-            const chatRes = await callLLM({ model: activeModel as ModelId, messages: currentHistory, apiKeys });
+            const chatRes = await callLLM({ 
+              model: activeModel as ModelId, 
+              messages: currentHistory, 
+              systemPrompt: modeSystemPrompt,
+              apiKeys 
+            });
             finalContent = chatRes.content;
             break;
         }

@@ -4,6 +4,7 @@ import { ChatInput } from '../components/chat/ChatInput';
 import { useChat } from '../hooks/useChat';
 import { useChatStore } from '../store/chatStore';
 import { Image, Pencil, Globe } from 'lucide-react';
+import { CHAT_MODES } from '../types/modes';
 
 const SUGGESTIONS = [
   { text: 'Create an image',     icon: Image },
@@ -12,9 +13,11 @@ const SUGGESTIONS = [
 ];
 
 export default function ChatPage() {
-  const { messages } = useChatStore();
+  const { messages, chatMode } = useChatStore();
   const { sendMessage, isLoading } = useChat();
   const isEmpty = messages.length === 0;
+
+  const modeConfig = CHAT_MODES[chatMode];
 
   return (
     /* Outer wrapper fills remaining height after TopBar */
@@ -67,6 +70,16 @@ export default function ChatPage() {
           <div className="flex-shrink-0 px-3 sm:px-4 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-5 border-t border-white/5 bg-transparent"
                style={{ paddingBottom: 'max(1rem, calc(1rem + env(safe-area-inset-bottom)))' }}>
             <div className="max-w-3xl mx-auto w-full">
+              {/* Mode indicator */}
+              {chatMode !== 'normal' && (
+                <div className="mb-2 flex items-center gap-2 text-xs text-emerald-400 animate-slide-in-up">
+                  <span className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full font-semibold">
+                    {modeConfig.icon} {modeConfig.name} Mode Active
+                  </span>
+                  <span className="text-zinc-500">{modeConfig.description}</span>
+                </div>
+              )}
+              
               <ChatInput onSend={sendMessage} disabled={isLoading} />
               <p className="text-center mt-2 text-[9px] tracking-wide text-zinc-700 uppercase">
                 NEXUS AI can make mistakes — verify important information.

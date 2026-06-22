@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Sun, Moon, Bell, User, History, X, Cpu } from 'lucide-react';
+import { Sun, Moon, Bell, History, X, Cpu, LogOut } from 'lucide-react';
 import { ModelSelector } from '../chat/ModelSelector';
-import { ApiKeyWarning } from '../ui/ApiKeyWarning';
+import { useAuth } from '../../context/AuthContext';
 
 interface TopBarProps {
   onHistoryToggle: () => void;
@@ -11,18 +10,13 @@ interface TopBarProps {
 
 export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
   const [darkMode, setDarkMode] = useState(true);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { signOut, user } = useAuth();
 
-  const tabs = [
-    { name: 'Dashboard', path: '/stats' },
-    { name: 'AI Chat',    path: '/' },
-    { name: 'Help',       path: '/docs' },
-    { name: 'Account',    path: '/settings' },
-  ];
-
-  const currentPath = location.pathname;
-  const activeTab = tabs.find(t => t.path === currentPath)?.name || 'AI Chat';
+  const handleSignOut = async () => {
+    if (confirm('Are you sure you want to sign out?')) {
+      await signOut();
+    }
+  };
 
   return (
     <header className="flex flex-col bg-[#070809]/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-30 w-full select-none flex-shrink-0">
@@ -41,22 +35,10 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Center tab nav — only md+ */}
-        <nav className="hidden md:flex items-center bg-[#0d0e10]/80 border border-white/5 rounded-full px-1.5 py-1 gap-0.5 flex-shrink-0">
-          {tabs.map(tab => (
-            <button
-              key={tab.name}
-              onClick={() => navigate(tab.path)}
-              className={`text-[10px] font-bold tracking-wide px-3.5 py-1.5 rounded-full transition-all duration-150 ${
-                activeTab === tab.name
-                  ? 'bg-white/5 border border-white/5 text-white'
-                  : 'text-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
+        {/* App title - center */}
+        <div className="hidden md:flex items-center gap-2">
+          <h1 className="text-sm font-bold text-white tracking-wide">NEXUS AI</h1>
+        </div>
 
         <div className="flex-1" />
 
@@ -86,14 +68,25 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
           </button>
 
-          {/* Avatar */}
-          <button
-            onClick={() => navigate('/settings')}
-            className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:border-emerald-500/30 transition-all"
-            title="Profile & Keys"
-          >
-            <User size={14} />
-          </button>
+          {/* User email display */}
+          {user && (
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <span className="text-xs text-zinc-400 max-w-[150px] truncate">
+                {user.email}
+              </span>
+            </div>
+          )}
+
+          {/* Sign out */}
+          {user && (
+            <button
+              onClick={handleSignOut}
+              className="p-2 text-zinc-500 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors"
+              title="Sign out"
+            >
+              <LogOut size={15} />
+            </button>
+          )}
 
           {/* History toggle — always visible */}
           <button
@@ -109,9 +102,6 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
           </button>
         </div>
       </div>
-
-      {/* API key warning banner */}
-      <ApiKeyWarning />
     </header>
   );
 }

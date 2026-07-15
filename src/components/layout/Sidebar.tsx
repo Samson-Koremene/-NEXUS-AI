@@ -45,7 +45,8 @@ export function Sidebar() {
   return (
     <>
       {/* ── Desktop: left icon rail ── */}
-      <div className="hidden md:flex w-16 bg-[#0d0e10]/80 backdrop-blur-xl border-r border-white/5 flex-col items-center justify-between py-5 h-full z-20 select-none flex-shrink-0">
+      <div className="hidden md:flex w-16 backdrop-blur-xl border-r flex-col items-center justify-between py-5 h-full z-20 select-none flex-shrink-0 transition-colors duration-300"
+           style={{ background: 'color-mix(in srgb, var(--bg-surface) 80%, transparent)', borderColor: 'var(--border-primary)' }}>
         {/* Logo */}
         <div className="w-9 h-9 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/5">
           <MessageSquare size={18} />
@@ -67,7 +68,8 @@ export function Sidebar() {
       </div>
 
       {/* ── Mobile: fixed bottom nav bar ── */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-[#0d0e10]/80 backdrop-blur-xl border-t border-white/5 flex items-center justify-around px-2 pt-2 pb-[max(8px,env(safe-area-inset-bottom))] select-none">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-50 backdrop-blur-xl border-t flex items-center justify-around px-2 pt-2 pb-[max(8px,env(safe-area-inset-bottom))] select-none transition-colors duration-300"
+           style={{ background: 'color-mix(in srgb, var(--bg-surface) 80%, transparent)', borderColor: 'var(--border-primary)' }}>
         {NAV.map(item => <NavIcon key={item.label} {...item} side="mobile" />)}
         <button
           onClick={handleSignOut}

@@ -38,9 +38,11 @@ export function MessageBubble({ message }: { message: Message }) {
           {/* Bubble */}
           <div className={`px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl transition-all text-xs sm:text-sm leading-relaxed break-words w-full ${
             isUser
-              ? 'bg-gradient-to-r from-emerald-500/10 to-amber-500/5 border border-emerald-500/15 text-zinc-100 rounded-tr-sm shadow-md shadow-emerald-950/5'
-              : 'bg-[#0d0e10] border border-white/[0.04] text-zinc-300 rounded-tl-sm shadow-sm'
-          }`}>
+              ? 'bg-gradient-to-r from-emerald-500/10 to-amber-500/5 border border-emerald-500/15 rounded-tr-sm shadow-md shadow-emerald-950/5'
+              : 'border rounded-tl-sm shadow-sm'
+          }`}
+          style={isUser ? { color: 'var(--text-primary)' } : { background: 'var(--bg-secondary)', borderColor: 'var(--border-primary)', color: 'var(--text-secondary)' }}
+          >
             {message.content && (
               <div className="prose prose-sm max-w-none dark:prose-invert font-sans leading-relaxed">
                 <ReactMarkdown rehypePlugins={[rehypeHighlight]}>

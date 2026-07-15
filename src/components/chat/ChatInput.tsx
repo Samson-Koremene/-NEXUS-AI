@@ -105,7 +105,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   return (
     <form
       onSubmit={submit}
-      className="relative flex flex-col w-full bg-[#0d0e10]/80 backdrop-blur-xl border border-white/[0.08] rounded-2xl px-3 py-3 focus-within:border-emerald-500/20 transition-all duration-200 shadow-xl shadow-black/30"
+      className="relative flex flex-col w-full backdrop-blur-xl border rounded-2xl px-3 py-3 focus-within:border-emerald-500/20 transition-all duration-200 shadow-xl shadow-black/30"
+      style={{ background: 'color-mix(in srgb, var(--bg-surface) 80%, transparent)', borderColor: 'var(--border-primary)' }}
     >
       <input type="file" ref={fileInputRef} onChange={handleFile} className="hidden" />
 
@@ -128,8 +129,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         onKeyDown={onKeyDown}
         placeholder={file ? 'Add a message to this file…' : 'Ask a question or make a request…'}
         rows={1}
-        disabled={disabled}
-        className="w-full bg-transparent text-xs sm:text-sm resize-none focus:outline-none text-zinc-100 placeholder-zinc-600 overflow-y-auto font-sans leading-relaxed max-h-40 disabled:opacity-50"
+        className="w-full bg-transparent text-xs sm:text-sm resize-none focus:outline-none overflow-y-auto font-sans leading-relaxed max-h-40 disabled:opacity-50"
+        style={{ color: 'var(--text-primary)' }}
       />
 
       {/* Bottom action row */}
@@ -154,7 +155,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
                 <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setMenuOpen(false)} />
                 
                 {/* Popup action menu */}
-                <div className="absolute left-0 bottom-[calc(100%+12px)] z-50 w-56 bg-[#161719]/90 backdrop-blur-2xl border border-white/[0.1] shadow-2xl rounded-2xl p-1.5 flex flex-col gap-0.5 animate-slide-in-up origin-bottom-left">
+                <div className="absolute left-0 bottom-[calc(100%+12px)] z-50 w-56 backdrop-blur-2xl border shadow-2xl rounded-2xl p-1.5 flex flex-col gap-0.5 animate-slide-in-up origin-bottom-left"
+                     style={{ background: 'color-mix(in srgb, var(--bg-tertiary) 95%, transparent)', borderColor: 'var(--border-secondary)' }}>
                   {/* Add photos & files */}
                   <button
                     type="button"

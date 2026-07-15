@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Sun, Moon, Bell, History, X, Cpu, LogOut } from 'lucide-react';
+import { History, X, Cpu, LogOut } from 'lucide-react';
 import { ModelSelector } from '../chat/ModelSelector';
 import { useAuth } from '../../context/AuthContext';
 
@@ -9,7 +8,6 @@ interface TopBarProps {
 }
 
 export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
-  const [darkMode, setDarkMode] = useState(true);
   const { signOut, user } = useAuth();
 
   const handleSignOut = async () => {
@@ -19,7 +17,9 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
   };
 
   return (
-    <header className="flex flex-col bg-[#070809]/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-30 w-full select-none flex-shrink-0">
+    <header className="flex flex-col backdrop-blur-xl border-b sticky top-0 z-30 w-full select-none flex-shrink-0 transition-colors duration-300"
+      style={{ background: `color-mix(in srgb, var(--bg-primary) 80%, transparent)`, borderColor: 'var(--border-primary)' }}
+    >
       <div className="h-14 px-3 sm:px-5 flex items-center gap-2">
 
         {/* Mobile brand logo (hidden on md+ where sidebar shows it) */}
@@ -37,36 +37,14 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
 
         {/* App title - center */}
         <div className="hidden md:flex items-center gap-2">
-          <h1 className="text-sm font-bold text-white tracking-wide">NEXUS AI</h1>
+          <h1 className="text-sm font-bold tracking-wide" style={{ color: 'var(--text-primary)' }}>NEXUS AI</h1>
         </div>
 
         <div className="flex-1" />
 
         {/* Right utilities */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          {/* Theme toggle — sm+ */}
-          <div className="hidden sm:flex items-center bg-[#0d0e10]/80 border border-white/5 rounded-full px-1.5 py-1 gap-0.5">
-            <button
-              onClick={() => setDarkMode(false)}
-              className={`p-1 rounded-full transition-colors ${!darkMode ? 'text-amber-400 bg-amber-500/10' : 'text-zinc-500 hover:text-zinc-300'}`}
-              title="Light mode"
-            >
-              <Sun size={13} />
-            </button>
-            <button
-              onClick={() => setDarkMode(true)}
-              className={`p-1 rounded-full transition-colors ${darkMode ? 'text-emerald-400 bg-emerald-500/10' : 'text-zinc-500 hover:text-zinc-300'}`}
-              title="Dark mode"
-            >
-              <Moon size={13} />
-            </button>
-          </div>
 
-          {/* Bell */}
-          <button className="relative p-2 text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-lg transition-colors" title="Notifications">
-            <Bell size={15} />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-          </button>
 
           {/* User email display */}
           {user && (

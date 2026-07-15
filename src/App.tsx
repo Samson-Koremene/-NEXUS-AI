@@ -26,7 +26,7 @@ export default function App() {
         {/* Full-height container that never overflows */}
         <div 
         onMouseMove={handleMouseMove}
-        className="flex h-[100dvh] w-full bg-[#070809] text-zinc-300 overflow-hidden font-sans relative"
+        className="flex h-[100dvh] w-full overflow-hidden font-sans relative"
       >
         
         {/* Dynamic Animated Motion Background Pattern */}

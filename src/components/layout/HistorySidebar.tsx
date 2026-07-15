@@ -56,9 +56,11 @@ export function HistorySidebar({ onClose }: HistorySidebarProps = {}) {
   }, {});
 
   return (
-    <div className="w-72 bg-[#0d0e10]/80 backdrop-blur-xl border-l border-white/5 flex flex-col h-full select-none">
+    <div className="w-72 backdrop-blur-xl border-l flex flex-col h-full select-none transition-colors duration-300"
+         style={{ background: 'color-mix(in srgb, var(--bg-surface) 80%, transparent)', borderColor: 'var(--border-primary)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 border-b flex-shrink-0"
+           style={{ borderColor: 'var(--border-primary)' }}>
         <span className="flex items-center gap-1.5 text-[11px] font-bold tracking-widest text-zinc-400 uppercase">
           <Clock size={12} className="text-zinc-500" />
           History
@@ -106,9 +108,10 @@ export function HistorySidebar({ onClose }: HistorySidebarProps = {}) {
                     onClick={() => handleResume(session)}
                     className={`group relative flex items-center justify-between p-2.5 rounded-xl border cursor-pointer transition-all duration-150 ${
                       isCurrent
-                        ? 'bg-emerald-500/[0.04] border-emerald-500/20 text-white'
-                        : 'bg-transparent border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03] hover:border-white/5'
+                        ? 'bg-emerald-500/[0.04] border-emerald-500/20 text-emerald-400'
+                        : 'bg-transparent border-transparent hover:border-white/5'
                     }`}
+                    style={!isCurrent ? { color: 'var(--text-muted)' } : {}}
                   >
                     <div className="flex items-center gap-2 overflow-hidden pr-6">
                       <MessageSquare

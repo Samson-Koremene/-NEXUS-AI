@@ -3,15 +3,71 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── Theme custom properties ── */
+  :root {
+    --bg-primary: #070809;
+    --bg-secondary: #0d0e10;
+    --bg-tertiary: #161719;
+    --bg-surface: rgba(13, 14, 16, 0.8);
+    --bg-hover: rgba(255, 255, 255, 0.05);
+    --bg-input: rgba(255, 255, 255, 0.05);
+    --border-primary: rgba(255, 255, 255, 0.05);
+    --border-secondary: rgba(255, 255, 255, 0.1);
+    --border-input: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #d4d4d8;
+    --text-tertiary: #a1a1aa;
+    --text-muted: #71717a;
+    --text-faint: #3f3f46;
+    --selection-bg: rgba(16, 185, 129, 0.3);
+    --selection-color: #ffffff;
+    --ring-offset: #070809;
+    --grid-color: rgba(16, 185, 129, 0.09);
+    --grid-scan: rgba(16, 185, 129, 0.05);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.05);
+    --scrollbar-hover: rgba(16, 185, 129, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --prose-invert: 1;
+  }
+
+  html.light {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f0f1f3;
+    --bg-surface: rgba(255, 255, 255, 0.9);
+    --bg-hover: rgba(0, 0, 0, 0.04);
+    --bg-input: rgba(0, 0, 0, 0.03);
+    --border-primary: rgba(0, 0, 0, 0.08);
+    --border-secondary: rgba(0, 0, 0, 0.12);
+    --border-input: rgba(0, 0, 0, 0.15);
+    --text-primary: #18181b;
+    --text-secondary: #3f3f46;
+    --text-tertiary: #52525b;
+    --text-muted: #71717a;
+    --text-faint: #a1a1aa;
+    --selection-bg: rgba(16, 185, 129, 0.2);
+    --selection-color: #18181b;
+    --ring-offset: #f8f9fa;
+    --grid-color: rgba(16, 185, 129, 0.06);
+    --grid-scan: rgba(16, 185, 129, 0.03);
+    --scrollbar-thumb: rgba(0, 0, 0, 0.08);
+    --scrollbar-hover: rgba(16, 185, 129, 0.3);
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --prose-invert: 0;
+  }
+
   html {
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply antialiased font-sans bg-[#070809] text-zinc-300;
+    @apply antialiased font-sans;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   ::selection {
-    background: rgba(16, 185, 129, 0.3);
-    color: #ffffff;
+    background: var(--selection-bg);
+    color: var(--selection-color);
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -26,8 +82,8 @@
 /* ── Scrollbars ── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.2); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
 
 /* ── Typing indicator ── */
 @keyframes typing {
@@ -77,7 +133,11 @@
 .mb-safe  { margin-bottom:  env(safe-area-inset-bottom, 0px); }
 
 /* ── Focus ring reset for custom buttons ── */
-button:focus-visible { @apply outline-none ring-2 ring-emerald-500/40 ring-offset-1 ring-offset-[#070809]; }
+button:focus-visible { outline: none; ring: 2px; }
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ring-offset), 0 0 0 4px rgba(16, 185, 129, 0.4);
+}
 
 /* ── Floating Background Nebula Orbs ── */
 @keyframes float-nebula-1 {
@@ -161,4 +221,37 @@ button:focus-visible { @apply outline-none ring-2 ring-emerald-500/40 ring-offse
 }
 .animate-release-particle {
   animation: release-particle 3.5s cubic-bezier(0.1, 0.8, 0.25, 1) infinite;
+}
+
+/* ── Theme-aware utility classes ── */
+.theme-bg-primary { background: var(--bg-primary); }
+.theme-bg-secondary { background: var(--bg-secondary); }
+.theme-bg-tertiary { background: var(--bg-tertiary); }
+.theme-bg-surface { background: var(--bg-surface); }
+.theme-border { border-color: var(--border-primary); }
+.theme-border-secondary { border-color: var(--border-secondary); }
+.theme-text-primary { color: var(--text-primary); }
+.theme-text-secondary { color: var(--text-secondary); }
+.theme-text-tertiary { color: var(--text-tertiary); }
+.theme-text-muted { color: var(--text-muted); }
+.theme-text-faint { color: var(--text-faint); }
+
+/* Light mode prose overrides */
+html.light .prose {
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-lead: var(--text-tertiary);
+  --tw-prose-links: #059669;
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border-primary);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-quote-borders: var(--border-secondary);
+  --tw-prose-captions: var(--text-muted);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: #e5e7eb;
+  --tw-prose-pre-bg: #1e293b;
+  --tw-prose-th-borders: var(--border-secondary);
+  --tw-prose-td-borders: var(--border-primary);
 }

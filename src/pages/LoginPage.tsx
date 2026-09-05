@@ -32,9 +32,7 @@ export default function LoginPage() {
         setEmail('')
       } else if (mode === 'signup') {
         await signUp(email, password)
-        setSuccess('Account created! Check your email to verify.')
-        setEmail('')
-        setPassword('')
+        navigate(from, { replace: true })
       } else {
         await signIn(email, password)
         navigate(from, { replace: true })
@@ -148,14 +146,6 @@ export default function LoginPage() {
                   className="text-xs text-zinc-400 hover:text-white transition"
                 >
                   Don't have an account? <span className="text-emerald-400">Sign up</span>
-                </button>
-                <br />
-                <button
-                  type="button"
-                  onClick={() => setMode('reset')}
-                  className="text-xs text-zinc-400 hover:text-white transition"
-                >
-                  Forgot password?
                 </button>
               </>
             ) : (

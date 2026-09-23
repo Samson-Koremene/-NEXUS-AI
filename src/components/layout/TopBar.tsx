@@ -59,6 +59,7 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
           {user && (
             <button
               onClick={handleSignOut}
+              aria-label="Sign out"
               className="p-2 text-zinc-500 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors"
               title="Sign out"
             >
@@ -69,6 +70,7 @@ export function TopBar({ onHistoryToggle, historyOpen }: TopBarProps) {
           {/* History toggle — always visible */}
           <button
             onClick={onHistoryToggle}
+            aria-label={historyOpen ? 'Close history' : 'Chat history'}
             title={historyOpen ? 'Close history' : 'Chat history'}
             className={`p-2 rounded-xl border transition-all duration-150 ${
               historyOpen

@@ -46,11 +46,14 @@ Intent rules:
 - tts: user asks to read aloud, speak, or convert text to audio
 - conversation: everything else including general coding help without execution`
 
+// Default model used for intent classification when the caller does not specify one.
+// Routes through the OpenRouter gateway like every other call.
+const DEFAULT_CLASSIFIER_MODEL: ModelId = 'nvidia/nemotron-3-ultra-550b-a55b'
+
 export async function classifyIntent(
   userMessage: string,
   history: Message[],
-  model: ModelId,
-  apiKeys: { openai?: string; anthropic?: string; google?: string }
+  model: ModelId = DEFAULT_CLASSIFIER_MODEL
 ): Promise<ClassifiedIntent> {
   const last5 = history.slice(-5)
 
@@ -62,7 +65,6 @@ export async function classifyIntent(
         { id: 'classify', role: 'user', content: userMessage, resultType: 'text', timestamp: Date.now() },
       ],
       systemPrompt: CLASSIFIER_SYSTEM,
-      apiKeys,
     })
 
     const raw = result.content.trim()

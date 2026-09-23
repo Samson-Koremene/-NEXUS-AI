@@ -4,9 +4,10 @@ import { MODELS } from '../../types/models';
 import { useChatStore } from '../../store/chatStore';
 
 const PROVIDER_COLORS: Record<string, string> = {
-  openai:    'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-  anthropic: 'text-amber-400  bg-amber-500/10  border-amber-500/20',
-  google:    'text-blue-400   bg-blue-500/10   border-blue-500/20',
+  nvidia:        'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+  poolside:      'text-blue-400    bg-blue-500/10    border-blue-500/20',
+  inclusionai:   'text-violet-400  bg-violet-500/10  border-violet-500/20',
+  google:        'text-blue-400    bg-blue-500/20    border-blue-500/20',
 };
 
 export function ModelSelector() {
@@ -20,6 +21,9 @@ export function ModelSelector() {
       {/* Trigger */}
       <button
         onClick={() => setOpen(o => !o)}
+        aria-label={`Select model, currently ${current.label}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
         className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-white/5 hover:bg-white/8 rounded-xl border border-white/10 transition-all focus:outline-none focus:ring-1 focus:ring-white/20 max-w-[200px] sm:max-w-none"
       >
         <span className="text-xs font-semibold text-zinc-200 truncate">{current.label}</span>

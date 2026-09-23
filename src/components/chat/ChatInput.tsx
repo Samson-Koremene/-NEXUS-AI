@@ -13,11 +13,25 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   const [listening, setListening]         = React.useState(false);
   const [menuOpen, setMenuOpen]           = React.useState(false);
 
-  const { chatMode, setChatMode } = useChatStore();
+  const { chatMode, setChatMode, inputDraft, setInputDraft } = useChatStore();
 
   const textareaRef  = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const speechRef    = useRef<any>(null);
+
+  /* Apply an external draft (e.g. from a suggestion chip) into the composer */
+  useEffect(() => {
+    if (!inputDraft) return;
+    setText(inputDraft);
+    setInputDraft('');
+    requestAnimationFrame(() => {
+      const el = textareaRef.current;
+      if (el) {
+        el.focus();
+        el.setSelectionRange(el.value.length, el.value.length);
+      }
+    });
+  }, [inputDraft, setInputDraft]);
 
   /* Auto-grow textarea */
   useEffect(() => {
@@ -141,6 +155,9 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
             <button
               type="button"
               onClick={() => setMenuOpen(prev => !prev)}
+              aria-label="Add actions"
+              aria-expanded={menuOpen}
+              aria-haspopup="menu"
               className={`p-1.5 rounded-lg transition-all duration-200 ${
                 menuOpen ? 'text-white bg-white/10' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
               }`}
@@ -286,6 +303,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
             )}
           </div>
           <button type="button" onClick={reset}
+            aria-label="Reset input"
             className="p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-lg transition-all" title="Reset">
             <RefreshCw size={13} />
           </button>
@@ -301,6 +319,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           <button
             type="button"
             onClick={toggleMic}
+            aria-label={listening ? 'Stop voice input' : 'Voice input'}
             title="Voice input"
             className={`p-1.5 rounded-lg transition-all ${listening ? 'text-rose-500 bg-rose-500/10' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
           >
@@ -310,6 +329,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
           <button
             type="submit"
             disabled={!canSend}
+            aria-label="Send message"
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95 shadow-md ${
               canSend
                 ? 'bg-gradient-to-tr from-emerald-500 to-green-400 text-zinc-950 hover:opacity-90 shadow-emerald-500/20'

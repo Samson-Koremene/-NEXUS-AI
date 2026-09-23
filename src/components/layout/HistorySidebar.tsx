@@ -76,6 +76,7 @@ export function HistorySidebar({ onClose }: HistorySidebarProps = {}) {
           {onClose && (
             <button
               onClick={onClose}
+              aria-label="Close history"
               className="p-1.5 text-zinc-500 hover:text-zinc-200 hover:bg-white/5 rounded-lg transition-all"
             >
               <X size={13} />
@@ -123,6 +124,7 @@ export function HistorySidebar({ onClose }: HistorySidebarProps = {}) {
                     <button
                       onClick={(e) => handleDelete(e, session.id, isCurrent)}
                       title="Delete"
+                      aria-label={`Delete chat ${session.title || 'Untitled'}`}
                       className="absolute right-2 opacity-0 group-hover:opacity-100 p-1 text-zinc-600 hover:text-rose-400 transition-all"
                     >
                       <Trash2 size={11} />

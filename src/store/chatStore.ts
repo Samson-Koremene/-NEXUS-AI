@@ -9,8 +9,11 @@ interface ChatState {
   isLoading: boolean;
   activeModel: string;
   chatMode: ChatMode;
+  inputDraft: string;
   setSession: (session: Session | null) => void;
+  setInputDraft: (text: string) => void;
   addMessage: (message: Message) => void;
+  removeLastMessage: () => void;
   updateMessage: (id: string, updates: Partial<Message>) => void;
   setLoading: (loading: boolean) => void;
   setModel: (modelId: string) => void;
@@ -22,8 +25,9 @@ export const useChatStore = create<ChatState>((set) => ({
   currentSessionId: null,
   messages: [],
   isLoading: false,
-  activeModel: storage.getModel(),
+  activeModel: storage.getModel() || 'nvidia/nemotron-3-ultra-550b-a55b',
   chatMode: 'normal',
+  inputDraft: '',
 
   setSession: (session) => {
     if (session) {
@@ -45,6 +49,8 @@ export const useChatStore = create<ChatState>((set) => ({
     return { messages: newMessages };
   }),
 
+  removeLastMessage: () => set((state) => ({ messages: state.messages.slice(0, -1) })),
+
   setLoading: (isLoading) => set({ isLoading }),
 
   setModel: (modelId) => {
@@ -53,6 +59,8 @@ export const useChatStore = create<ChatState>((set) => ({
   },
 
   setChatMode: (chatMode) => set({ chatMode }),
+
+  setInputDraft: (inputDraft) => set({ inputDraft }),
 
   clearSession: () => set({ currentSessionId: null, messages: [], chatMode: 'normal' }),
 }));

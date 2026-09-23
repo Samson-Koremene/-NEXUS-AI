@@ -13,6 +13,7 @@ function NavIcon({
     <NavLink
       to={to}
       title={label}
+      aria-label={label}
       className={({ isActive }) => {
         const active = isActive;
         if (side === 'desktop') {
@@ -60,6 +61,7 @@ export function Sidebar() {
         {/* Logout */}
         <button
           title="Sign out"
+          aria-label="Sign out"
           onClick={handleSignOut}
           className="w-10 h-10 rounded-xl bg-transparent hover:bg-white/5 border border-transparent text-zinc-500 hover:text-rose-400 flex items-center justify-center transition-all duration-150 active:scale-95"
         >

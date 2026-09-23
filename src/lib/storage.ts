@@ -1,4 +1,5 @@
 import { Session } from '../types/chat';
+import { MODELS } from '../types/models';
 
 export const storage = {
   getKeys: () => {
@@ -35,7 +36,12 @@ export const storage = {
     localStorage.setItem('nexus:sessions', JSON.stringify(sessions));
   },
   getModel: (): string => {
-    return localStorage.getItem('nexus:model') || 'gpt-4o';
+    const stored = localStorage.getItem('nexus:model');
+    // Guard against stale model ids persisted before the OpenRouter migration
+    if (stored && MODELS.some((m) => m.id === stored)) {
+      return stored;
+    }
+    return 'nvidia/nemotron-3-ultra-550b-a55b';
   },
   setModel: (model: string) => {
     localStorage.setItem('nexus:model', model);

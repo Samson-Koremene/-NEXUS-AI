@@ -31,6 +31,7 @@ export function CodeResult({ code, language, output }: CodeResultProps) {
         <button
           onClick={handleCopy}
           title="Copy"
+          aria-label="Copy code"
           className="text-zinc-600 hover:text-zinc-400 transition-colors p-0.5"
         >
           <Copy size={12} className={copied ? 'text-emerald-400' : ''} />

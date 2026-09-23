@@ -9,21 +9,18 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
   const location = useLocation()
 
-  // Show loading spinner while checking auth
+  // Wait for the initial Supabase session to resolve before deciding.
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#070809]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-white/10 border-t-emerald-500 rounded-full animate-spin" />
-          <p className="text-sm text-zinc-400">Loading...</p>
-        </div>
+      <div className="flex h-full items-center justify-center">
+        <div className="w-7 h-7 border-2 border-white/10 border-t-emerald-500 rounded-full animate-spin" />
       </div>
     )
   }
 
-  // Redirect to login if not authenticated
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    // Remember where they were heading so login can send them back.
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />
   }
 
   return <>{children}</>
